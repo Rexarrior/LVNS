@@ -8,16 +8,20 @@ Contain a interface for imagine a remoute device
 using System; 
 #endregion
 
-namespace RSDispatcher
+namespace Core
 {
-    /// <summary>
-    /// Any device which can be controlled by remoute interface. 
-    /// </summary>
-    interface IDevice
+    namespace RSDispatcher
     {
-        
-        int ID; 
-        ICollection<string> conrtolPoints;
-        ICollection<string> supportedInterfaces ;
+        /// <summary>
+        /// Any device which can be controlled by remoute interface. 
+        /// </summary>
+        interface IDevice
+        {
+            
+            int ID; 
+            ICollection<string> acceptingConrtolPoints;
+            ICollection<string> supportedInterfaces ;
+            I
+        }
     }
 }
