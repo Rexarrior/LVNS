@@ -2,7 +2,7 @@
 
 namespace Core
 {
-    interface ICoreComponent
+    interface IAddressable
     {
         UInt32 ID { get; set; }
     }
