@@ -306,4 +306,5 @@ App.config
 *.csproj
 *.sln
 
-Program.cs
+Core/Program.cs
+SimplifiedCore/DLLTests
