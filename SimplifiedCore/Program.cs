@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Reflection;
+
 namespace SimplifiedCore
 {
     class Program
@@ -23,7 +25,7 @@ namespace SimplifiedCore
                 command = Console.ReadLine().ToLower();
             }
 
-            core.Stop();
+            core.Stop( true );
 
             return ErrorCodes.ERROR_SUCCESS;
         }

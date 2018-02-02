@@ -10,17 +10,10 @@ namespace SimplifiedCore
     {
         /*
          * Used to sustain the ID that
-         * interface identifies this entity by.
+         * interface (DLL) identifies this entity by.
          */
         private UInt32 _ID;
 
-        /*
-         * If this returns true, we register the
-         * device (entity) as a receiver. Otherwise,
-         * as a sender
-         * 
-         * This is also supposed to be an external function
-         */
         private IsReceiver_Delegate _IsReceiverRoutine;
 
         public bool IsReceiver()

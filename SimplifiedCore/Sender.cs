@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimplifiedCore
 {
-    class Sender : IMatchable, IDefinedEntity
+    class Sender : IDefinedEntity
     {
         private UInt32 _ID;
 
@@ -15,13 +15,15 @@ namespace SimplifiedCore
 
         private GetData_Delegate _GetDataRoutine;
 
+        private CloseConnection_Delegate _CloseConnectionRoutine;
+
         public string GetMID()
         {
-            StringBuilder sb = new StringBuilder(1024);
+            StringBuilder buffer = new StringBuilder(1024);
 
-            _GetMIDRoutine(_ID, sb);
+            _GetMIDRoutine(_ID, buffer);
 
-            return sb.ToString();
+            return buffer.ToString();
         }
 
         public bool MatchMID(string id)
@@ -45,16 +47,19 @@ namespace SimplifiedCore
             _GetDataRoutine = getData;
         }
 
-        /*
-        * Retreives data from the Sender
-        * 
-        * THIS FUNCTION IS SUPPOSED TO BE
-        * OUTSIDE OF THE "SimplifiedCore" -
-        * IN A SEPARATE DLL
-        */
+        public void AcceptCloseConnectionDelegate(CloseConnection_Delegate closeConnection)
+        {
+            _CloseConnectionRoutine = closeConnection;
+        }
+
         public void GetData(byte[] data)
         {
             _GetDataRoutine( _ID, data );
+        }
+
+        public void CloseConnection()
+        {
+            _CloseConnectionRoutine( _ID );
         }
     }
 }
