@@ -16,5 +16,7 @@ namespace SimplifiedCore
         void AcceptID(UInt32 id);
 
         void AcceptMIDDelegates(GetMID_Delegate getMID, MatchMID_Delegate matchMID);
+
+        void AcceptCloseConnectionDelegate(CloseConnection_Delegate closeConnection);
     }
 }

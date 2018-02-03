@@ -1,0 +1,20 @@
+﻿Suffixes:
+
+_Delegate is for types
+Delegate is for the delegates to be stored and passed
+Routine is for the delegates to be invoked
+
+Prefixes:
+
+_ (underscore) is for private fields
+
+Cases:
+
+PascalCase is for class members
+camelCase is for local variables (including function parameters)
+CAPITAL_SNAKE_CASE is for constants
+
+Braces are placed like this:
+rettype funcname( parameters )
+{
+}

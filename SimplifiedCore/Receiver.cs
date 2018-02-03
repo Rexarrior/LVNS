@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimplifiedCore
 {
-    class Receiver : IMatchable, IDefinedEntity
+    class Receiver : IDefinedEntity
     {
         private UInt32 _ID;
 
@@ -15,13 +15,15 @@ namespace SimplifiedCore
 
         private DispatchData_Delegate _DispatchDataRoutine;
 
+        private CloseConnection_Delegate _CloseConnectionRoutine;
+
         public string GetMID()
         {
-            StringBuilder sb = new StringBuilder( 1024 );
+            StringBuilder buffer = new StringBuilder(1024);
 
-            _GetMIDRoutine( _ID, sb );
+            _GetMIDRoutine( _ID, buffer );
 
-            return sb.ToString();
+            return buffer.ToString();
         }
 
         public bool MatchMID(string id)
@@ -45,21 +47,19 @@ namespace SimplifiedCore
             _DispatchDataRoutine = dispatchData;
         }
 
-        /*
-         * Sends data to the Receiver
-         * 
-         * THIS FUNCTION IS SUPPOSED TO BE
-         * OUTSIDE OF THE "SimplifiedCore" -
-         * IN A SEPARATE DLL
-         * 
-         * And the id parameter does not belong
-         * to this SimplifiedCore system - we
-         * just send it to the DLL and it finds out
-         * which device it exactly is
-         */
+        public void AcceptCloseConnectionDelegate(CloseConnection_Delegate closeConnection)
+        {
+            _CloseConnectionRoutine = closeConnection;
+        }
+
         public void DispatchData(byte[] data)
         {
             _DispatchDataRoutine( _ID, data );
+        }
+
+        public void CloseConnection()
+        {
+            _CloseConnectionRoutine( _ID );
         }
     }
 }
