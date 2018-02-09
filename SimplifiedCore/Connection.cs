@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using NLog;
+using System.Reflection;
 
 namespace SimplifiedCore
 {
@@ -22,25 +24,58 @@ namespace SimplifiedCore
      * a connection between certain "points", that
      * we have references for.
      */
+
+    /// <summary>
+    /// Represents conenction between an sender and an receiver
+    /// </summary>
     class Connection : IDisposable
     {
+        /// <summary>
+        /// Sender of this connection
+        /// </summary>
         private Sender _Sender;
+
+        /// <summary>
+        /// Receiver of this connection
+        /// </summary>
         private Receiver _Receiver;
 
+        /// <summary>
+        /// Thread for data transfer methods running.
+        /// </summary>
         private Thread _TransferThread;
 
+        /// <summary>
+        /// Token for control transfer loop.
+        /// </summary>
         private CancellationTokenSource _TransferLoop;
 
-        /*
-         * The routine, run by the main thread (_TransferThread)
-         */
+        private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
+
+
+
+        /// <summary>
+        /// Main logic of data transfer
+        /// The routine, run by the main thread (_TransferThread)
+        /// </summary>
+        /// <param name="transferLoopToken"></param>
         private void TransferMain( CancellationToken transferLoopToken )
         {
+#if DEBUG
+            logger.Trace(LogTraceMessages.METHOD_INVOKED,
+                MethodBase.GetCurrentMethod());
+#endif
             byte[] data = new byte[1024];
 
             while (!transferLoopToken.IsCancellationRequested)
             {
-
+#if DEBUG
+                logger.Trace(LogTraceMessages.LIBRARY_METHOD_USE,
+                    "GetData");
+                logger.Trace(LogTraceMessages.LIBRARY_METHOD_USE,
+                    "DispatchData");
+#endif
                 // UNSAFE code here - this freezes, if
                 // DLL's GetData or DispatchData hangs
                 _Sender.GetData(data);
@@ -48,10 +83,25 @@ namespace SimplifiedCore
                 _Receiver.DispatchData(data);
 
             }
+#if DEBUG
+            logger.Trace(LogTraceMessages.TRANSFER_END);
+#endif
         }
 
+
+
+        /// <summary>
+        /// Start data transfer thread
+        /// </summary>
+        /// <returns>Success status by ErrorCode enum</returns>
         public int OpenTransfer()
         {
+#if DEBUG
+            logger.Trace(LogTraceMessages.METHOD_INVOKED,
+                  MethodBase.GetCurrentMethod());
+#endif
+
+
             // _TransferThread is null only right after
             // creation of the connection, before we run it
             // for the first time
@@ -59,6 +109,8 @@ namespace SimplifiedCore
             {
                 if (!_TransferLoop.IsCancellationRequested) // if this is not fresh, and cancellation hasn't been requested - it's now running
                 {
+                    logger.Error("{0}. Attempt to open transfer twice or more time. ",
+                                          ErrorCodes.ALREADY_RUNNING);
                     return ErrorCodes.ALREADY_RUNNING;
                 }
                 /*
@@ -81,6 +133,8 @@ namespace SimplifiedCore
                     {
                         if (!_TransferThread.Join(5000)) // wait 5 seconds
                         {
+                            logger.Error("{0}. Attempt to open transfer while previoous transfer is terminating. ",
+                                         ErrorCodes.PREVIOUS_RUN_DOESNT_TERMINATE);
                             return ErrorCodes.PREVIOUS_RUN_DOESNT_TERMINATE;
                         }
                     }
@@ -92,21 +146,39 @@ namespace SimplifiedCore
             // meaning we haven't started it yet
             if (_TransferLoop != null)
             {
+
+
                 _TransferLoop.Dispose();
+#if DEBUG
+                logger.Trace(LogTraceMessages.TRANSFER_LOOP_DISPOSED);
+#endif
             }
-            
+
+#if DEBUG
+            logger.Trace(LogTraceMessages.TRANSFER_STARTING);
+#endif
             _TransferThread = new Thread( delegate() { TransferMain(_TransferLoop.Token); } );
             _TransferLoop = new CancellationTokenSource();
 
             _TransferThread.Start();
-
+#if DEBUG
+            logger.Trace(LogTraceMessages.TRANSFER_STARTED_SUCCESFULL);
+#endif
             return ErrorCodes.ERROR_SUCCESS;
         }
+
+
+
+
 
         // TODO: Add safe closing
         // I mean, it is unsafe, because
         // DispatchData and GetData may hang
         // Or not.
+        /// <summary>
+        /// Close data transfer thread
+        /// </summary>
+        /// <returns>Success status by ErrorCode enum</returns>
         public int CloseTransfer()
         {
             // _TransferThread is null only right after
@@ -114,18 +186,26 @@ namespace SimplifiedCore
             // for the first time
             if (_TransferThread == null)
             {
+
+                logger.Error("{0}.  Attempt to close transfer withour starting.",
+                                      ErrorCodes.NOT_RUNNING);
                 return ErrorCodes.NOT_RUNNING; // haven't started yet
             }
             else
             {
                 if (!_TransferThread.IsAlive)
                 {
+                    logger.Error("{0}. Attempt to close transfer twice or more time.",
+                                          ErrorCodes.NOT_RUNNING);
                     return ErrorCodes.NOT_RUNNING; // already terminated
                 }
                 else
                 {
                     if (_TransferLoop.IsCancellationRequested)
                     {
+
+                        logger.Error("{0}. Attempt to close transfer while it is closing.   ",
+                                              ErrorCodes.PENDING_TERMINATION);
                         return ErrorCodes.PENDING_TERMINATION; // already asked for termination
                     }
                 }
@@ -133,49 +213,105 @@ namespace SimplifiedCore
 
             _TransferLoop.Cancel();
 
+#if DEBUG
+            logger.Trace(LogTraceMessages.TRANSFER_LOOP_CANCELED);
+#endif
+
             return ErrorCodes.ERROR_SUCCESS;
         }
 
+
+
+        /// <summary>
+        /// Check that given pair form this connection
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="receiver">Receiver</param>
+        /// <returns>is this connection between given pair? </returns>
         public bool MatchCheck(Sender sender, Receiver receiver)
         {
+#if DEBUG
+            logger.Trace(LogTraceMessages.METHOD_INVOKED,
+                  MethodBase.GetCurrentMethod());
+#endif
+
             return ((sender == _Sender) && (receiver == _Receiver));
         }
 
-        /*
-         * This function is needed when you
-         * have to be sure that the transfer
-         * has stopped before moving on
-         */
+        
+        /// <summary>
+        ///  This function is needed when you
+        ///  have to be sure that the transfer
+        ///  has stopped before moving on
+        /// </summary>
+        /// <returns>Success status by ErrorCode enum</returns>
         public int WaitForTermination()
         {
+#if DEBUG
+            logger.Trace(LogTraceMessages.METHOD_INVOKED,
+                  MethodBase.GetCurrentMethod());
+#endif
+
             if (_TransferThread == null)
             {
+
+                logger.Error("{0}. Attempt to begin waiting for termination not started transfer.",
+                                      ErrorCodes.NOT_RUNNING);
                 return ErrorCodes.NOT_RUNNING;
             }
             else
             {
                 if (!_TransferLoop.IsCancellationRequested)
                 {
+
+                    logger.Error("{0}. Attempt to begin waiting for not initializing termination.",
+                                          ErrorCodes.TERMINATION_NOT_REQUESTED);
                     return ErrorCodes.TERMINATION_NOT_REQUESTED;
                 }
                 else
                 {
+#if DEBUG
+                    logger.Trace(LogTraceMessages.WAITING_FOR_TERMINATION);
+#endif
                     _TransferThread.Join();
+#if DEBUG
+                    logger.Trace(LogTraceMessages.TERMINATED);
+#endif
                     return ErrorCodes.ERROR_SUCCESS;
                 }
             }
         }
 
+
+        /// <summary>
+        /// Invoke CloseConnection method for both participants of this connection
+        /// </summary>
         public void CloseBothConnections()
         {
+#if DEBUG
+            logger.Trace(LogTraceMessages.METHOD_INVOKED,
+                  MethodBase.GetCurrentMethod());
+#endif
+
             // Close connections point -
             // here we call .dll functions
             _Sender.CloseConnection();
             _Receiver.CloseConnection();
+#if DEBUG
+            logger.Trace(LogTraceMessages.CONNECTION_BOTH__CLOSED);
+#endif
         }
 
+
+        /// <summary>
+        /// Dispose this connection
+        /// </summary>
         public void Dispose()
         {
+#if DEBUG
+            logger.Trace(LogTraceMessages.METHOD_INVOKED,
+                  MethodBase.GetCurrentMethod());
+#endif
             _TransferThread = null;
 
             _TransferLoop.Dispose();
@@ -184,8 +320,20 @@ namespace SimplifiedCore
             _Receiver = null;
         }
 
+
+
+        /// <summary>
+        /// Create representing of connection between the sender and the receiver
+        /// without starting a data transfer.
+        /// </summary>
+        /// <param name="sender">Sender of connection</param>
+        /// <param name="receiver">Receiver of connection</param>
         public Connection(Sender sender, Receiver receiver)
         {
+#if DEBUG
+            logger.Trace(LogTraceMessages.CONSTRUCTOR_INVOKED);
+                 
+#endif
             _Sender = sender;
             _Receiver = receiver;
 

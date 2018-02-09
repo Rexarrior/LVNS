@@ -1,0 +1,6 @@
+In the project using Nlog logging framework. See: https://github.com/NLog/NLog/wiki
+Current setting: 
+All log messages with the level higher logger write to Common.log and send to udp:127.0.0.1:2003 
+All trace log messages logger write to Trace.log and send to udp:127.0.0.1:2001
+All error log messages logger write to Error.log and send to udp:127.0.0.1:2002
+If you want to use the logging system with your library, edit  [specify your library namespace] field in NLog.config

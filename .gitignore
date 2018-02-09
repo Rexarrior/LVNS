@@ -308,3 +308,6 @@ App.config
 
 Core/Program.cs
 SimplifiedCore/DLLTests
+
+# Nlog  files
+*.xsd
