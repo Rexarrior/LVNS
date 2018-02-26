@@ -18,6 +18,7 @@ namespace SimplifiedCore
      * external entities (we don't call them
      * "devices", because this would be too
      * narrow for the whole system) by some
+
      * particular means it supports, say,
      * sockets or USB-connection or filesystem -
      * whatever.
@@ -69,7 +70,7 @@ namespace SimplifiedCore
      * or whatever, type2 serves as an
      * "intermediary".
      */
-
+     
     /*
      * uint32 AcceptConnection()
      * 
@@ -78,7 +79,7 @@ namespace SimplifiedCore
      * It returns the ID that is described
      * in the last paragraph of the previous
      * commentary
-     */
+     */ 
     #endregion
 
     #region delegates declaration

@@ -2,6 +2,7 @@
 using System.Threading;
 using NLog;
 using System.Reflection;
+using System.Linq;
 
 namespace SimplifiedCore
 {
@@ -52,8 +53,27 @@ namespace SimplifiedCore
 
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
+        #region PROPERTIES
+        public string ReceiverMID { get => _Receiver.GetMID(); }
+
+        public string SenderMID { get => _Sender.GetMID(); }
+
+        #endregion
 
 
+        //TODO: It is temporary solution. So long. 
+        /// <summary>
+        /// Checking the given byte array for a valuable data contained. 
+        /// </summary>
+        /// <param name="data">An Array for checking.</param>
+        /// <returns>Return true if the array contains some non zero bytes.</returns>
+        private bool CheckDataForZero(byte[] data)
+        {
+            return data.Any(x=> x != 0);
+        }
+
+
+    
 
         /// <summary>
         /// Main logic of data transfer
@@ -66,11 +86,11 @@ namespace SimplifiedCore
             logger.Trace(LogTraceMessages.METHOD_INVOKED,
                 MethodBase.GetCurrentMethod());
 #endif
-            byte[] data = new byte[1024];
 
             while (!transferLoopToken.IsCancellationRequested)
             {
 #if DEBUG
+                byte[] data = new byte[OtherConsts.DATA_BUFFER_SIZE];
                 logger.Trace(LogTraceMessages.LIBRARY_METHOD_USE,
                     "GetData");
                 logger.Trace(LogTraceMessages.LIBRARY_METHOD_USE,
@@ -80,7 +100,10 @@ namespace SimplifiedCore
                 // DLL's GetData or DispatchData hangs
                 _Sender.GetData(data);
                 // SNIFF_POINT Point, when we can sniff and analyse messages
+                
                 _Receiver.DispatchData(data);
+                //data = new byte[OtherConsts.DATA_BUFFER_SIZE];
+                Thread.Sleep(OtherConsts.CONNECTION_LOOP_SLEEP_TIME);
 
             }
 #if DEBUG

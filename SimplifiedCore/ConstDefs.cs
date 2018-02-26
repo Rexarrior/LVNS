@@ -261,11 +261,11 @@
 
         public static string RECEIVER_EXPECTED_REGISTRED = "The expected receiver was registered. New  Transfer connection has opened.";
 
-        public static string RECEIVER_REGISTRED = "A new receiver was registred and now is waiting for smem senders.";
+        public static string RECEIVER_REGISTRED = "A new receiver mid {0} was registred and now is waiting for smem senders.";
 
         public static string SENDER_EXPECTED_REGISTRED = "The expected sender was registered. New transfer connection has opened.";
 
-        public static string SENDER_REGISTRED = "A new sender was registred and now is waiting for some receivers.";
+        public static string SENDER_REGISTRED = "A new sender mid {0} was registred and now is waiting for some receivers.";
 
         public static string CORE_STOPING = "The Core is now stoping....";
 
@@ -280,5 +280,8 @@
     static class OtherConsts
     {
         public  const int RTLD_NOW = 2;
+        public const int CONNECTION_LOOP_SLEEP_TIME = 1000;
+        public const int DATA_BUFFER_SIZE = 1024; 
+
     }
 }

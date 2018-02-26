@@ -303,11 +303,10 @@ Properties/
 # May be better to not ignore this
 App.config
 
-*.csproj
-*.sln
+#*.csproj
+#*.sln
 
-Core/Program.cs
-SimplifiedCore/DLLTests
+#Core/Program.cs
 
 # Nlog  files
 *.xsd

@@ -1,0 +1,1 @@
+Development of this version LVNS Core hasn't started yet. Please, see the SimplifiedCore folderl.

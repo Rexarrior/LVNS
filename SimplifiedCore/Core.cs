@@ -156,7 +156,20 @@ namespace SimplifiedCore
         /// </summary>
         private Thread _CleanUpThread;
 
+        /// <summary>
+        /// Flag for indicating the core running; 
+        /// </summary>
+        private bool _isRunning; 
+
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        #endregion
+
+        #region PROPERTIES
+        internal List<Connection> Connections { get => _Connections; }
+        internal List<Receiver> WaitingReceivers { get => _WaitingReceivers;}
+        internal List<Sender> WaitingSenders { get => _WaitingSenders; }
+        public string CurrentDirectory { get => _CurrentDirectory;  }
+        public bool IsRunning { get => _isRunning; set => _isRunning = value; }
         #endregion
 
 
@@ -214,7 +227,7 @@ namespace SimplifiedCore
             // matching sender not found
 
             _WaitingReceivers.Add(receiver);
-            logger.Info(LogInfoMessages.RECEIVER_REGISTRED) ; 
+            logger.Info(LogInfoMessages.RECEIVER_REGISTRED, receiver.GetMID()) ; 
         }
 
 
@@ -254,7 +267,7 @@ namespace SimplifiedCore
             logger.Trace(LogTraceMessages.RECEIVER_MATCHING_SENDER_NOT_FOUNDED);
 #endif
             _WaitingSenders.Add(sender);
-            logger.Info(LogInfoMessages.SENDER_REGISTRED);
+            logger.Info(LogInfoMessages.SENDER_REGISTRED, sender.GetMID());
         }
 
         
@@ -636,7 +649,7 @@ namespace SimplifiedCore
 #endif
             if (!File.Exists(configFilePath))
             {
-                logger.Error("{0}. {1}. Config file {2} not found.   ",
+                logger.Error("{0}. Config file {1} not found.   ",
                          ErrorCodes.FILE_NOT_FOUND,
                        Path.GetFileName(configFilePath));
                 return ErrorCodes.FILE_NOT_FOUND;
@@ -714,6 +727,7 @@ namespace SimplifiedCore
             logger.Info(LogInfoMessages.CONFIG_FILE_CLOSED, 
                 configName);
 
+            _isRunning = true;
             return ErrorCodes.ERROR_SUCCESS;
         }
 
@@ -803,6 +817,7 @@ namespace SimplifiedCore
 #if DEBUG
             logger.Trace(LogTraceMessages.CORE_STOPED);
 #endif
+            _isRunning = false; 
             return ErrorCodes.ERROR_SUCCESS;
         }
         #endregion
