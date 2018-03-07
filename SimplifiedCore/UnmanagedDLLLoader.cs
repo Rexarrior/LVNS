@@ -15,7 +15,10 @@ namespace SimplifiedCore
     /// </summary>
     class UnmanagedDLLLoader : IDLLLoader
     {
-        #region Native OS methods
+
+        #region FIELDS
+
+        #region NATIVE OS METHODS
 #if LINUX
         /// <summary>
         /// The function that is used to load the library.
@@ -39,6 +42,7 @@ namespace SimplifiedCore
         /// <param name="dllHandle">Handle of already loaded library that contains the method</param>
         /// <param name="procName">Signature of method to execute</param>
         /// <returns></returns>
+        
         [DllImport(Strings.UnmanagedDLLUsageFunctionsLibrary, SetLastError = true)]
         private static extern IntPtr GetProcAddress(IntPtr dllHandle, string procName);
 
@@ -56,6 +60,16 @@ namespace SimplifiedCore
         /// Handle of the library
         /// </summary>
         private IntPtr _DllHandle;
+
+        /// <summary>
+        /// Dll name is the part of path which is path relative to the current folder
+        /// </summary>
+        private String _DllName;
+
+        /// Full path to the dll
+        private String _DllPath;
+
+
 
         #region pointers of  methods of the library
         /// <summary>
@@ -105,24 +119,12 @@ namespace SimplifiedCore
         #endregion
 
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        #endregion
 
 
 
 
-        /// <summary>
-        /// Created instanse of UnmanagedDLLLoader without linking with any library
-        /// </summary>
-        public UnmanagedDLLLoader()
-        {
-#if DEBUG
-            logger.Trace(LogTraceMessages.CONSTRUCTOR_INVOKED);
-#endif
-
-            _DllHandle = IntPtr.Zero;
-        }
-
-
-
+        #region FIELDS
         /// <summary>
         ///  Load the library
         /// </summary>
@@ -378,5 +380,22 @@ namespace SimplifiedCore
 #endif
             return ErrorCodes.ERROR_SUCCESS;
         }
+#endregion
+
+
+        #region CONSTRUCTORS
+        /// <summary>
+        /// Created instanse of UnmanagedDLLLoader without linking with any library
+        /// </summary>
+        public UnmanagedDLLLoader()
+        {
+#if DEBUG
+            logger.Trace(LogTraceMessages.CONSTRUCTOR_INVOKED);
+#endif
+
+            _DllHandle = IntPtr.Zero;
+        }
+        #endregion
+
     }
 }

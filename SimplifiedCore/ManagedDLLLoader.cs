@@ -33,9 +33,9 @@ namespace SimplifiedCore
     /// </summary>
     class ManagedDLLLoader : IDLLLoader
     {
-        
-         
-         
+
+
+        #region FIELDS
         //private AppDomain _LocalDomain;
 
         /// <summary>
@@ -50,21 +50,33 @@ namespace SimplifiedCore
         private Type _DllMainClass;
 
 
+        /// <summary>
+        /// Full path to the DLL 
+        /// </summary>
+        private string _DLLpath;
+
+        /// <summary>
+        /// Dll name is the part of dll path whish is path relative to the current folder
+        /// </summary>
+        private string _DLLname;
+
+
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
 
-        /// <summary>
-        /// Create instance of ManagedDLLLoader without linking with any library
-        /// </summary>
-        public ManagedDLLLoader()
-        {
-#if DEBUG
-            logger.Trace(LogTraceMessages.CONSTRUCTOR_INVOKED);
-#endif
-            _DllAssembly = null;
-        }
+        #endregion
 
 
+
+        #region PROPERTIES
+        public string DLLpath { get => _DLLpath;  }
+
+        public string DLLname { get => _DLLname;  }
+        #endregion
+
+
+
+        #region METHODS
 
         /// <summary>
         /// Load library by it's path and linking this loader with it.
@@ -94,6 +106,10 @@ namespace SimplifiedCore
                 return ErrorCodes.FILE_NOT_FOUND;
             }
             #endregion
+
+            _DLLpath = Path.GetFullPath(dllPath);
+            _DLLname = dllName;
+
 
             //System.Security.Policy.Evidence evd = new System.Security.Policy.Evidence();
             /*
@@ -316,9 +332,32 @@ namespace SimplifiedCore
             _DllAssembly = null;
 #if DEBUG
             logger.Trace(LogTraceMessages.LIBRARY_UNLOADED,
-                "The" );
+                _DLLname );
 #endif
+            _DLLpath = "Undefined";
+            _DLLname = "Undefined";
             return ErrorCodes.ERROR_SUCCESS;
         }
+
+        #endregion
+
+
+
+        #region CONSTRUCTORS
+
+        /// <summary>
+        /// Create instance of ManagedDLLLoader without linking with any library
+        /// </summary>
+        public ManagedDLLLoader()
+        {
+#if DEBUG
+            logger.Trace(LogTraceMessages.CONSTRUCTOR_INVOKED);
+#endif
+            _DllAssembly = null;
+            _DLLpath = "Undefined";
+            _DLLname = "Undefined";
+        }
+        #endregion
+
     }
 }

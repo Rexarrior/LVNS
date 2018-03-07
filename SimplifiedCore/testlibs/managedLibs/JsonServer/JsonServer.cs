@@ -5,12 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using NLog;
-using SimplifiedCoreExternalInterface;
 using System.ComponentModel.Composition;
 using System.Net.Sockets;
 using System.Net;
-using ConsoleClient;
-
+using EntitiesFabric;
+using EntitiesFabric.ConsoleClient;
 
 namespace JsonServer
 {
@@ -83,7 +82,6 @@ namespace JsonServer
         public const int PORT = 5555;
         private const int BUFFER_SIZE = 1024;
 
-        protected static Logger logger = LogManager.GetCurrentClassLogger();
         private Socket _socket;
 
         private Task _task;
@@ -262,7 +260,6 @@ namespace JsonServer
     [PartNotDiscoverable]
     public class MatlabServerEntity : Entity
     {
-        protected Logger logger = LogManager.GetCurrentClassLogger();
 
         public override void Load(byte[] data)
         {

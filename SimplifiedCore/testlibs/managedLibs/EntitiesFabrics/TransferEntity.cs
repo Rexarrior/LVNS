@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SimplifiedCoreExternalInterface;
 
 
 
 
 
-namespace Messages
-{
+namespace EntitiesFabric
+{ 
     #region CosoleServerEntities
 
 

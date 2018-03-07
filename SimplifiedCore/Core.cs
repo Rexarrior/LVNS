@@ -104,30 +104,36 @@ namespace SimplifiedCore
         /// </summary>
         private List<Tuple<ExternalInterface, Thread>> _ExternalInterfaces;
 
+
         /// <summary>
         ///  All existing connections between senders and receivers
         /// </summary>
         private List<Connection> _Connections;
+
 
         /// <summary>
         /// All receivers which are waiting to an sender
         /// </summary>
         private List<Receiver> _WaitingReceivers;
 
+
         /// <summary>
         /// All senders which are waiting to an receiver
         /// </summary>
         private List<Sender> _WaitingSenders;
+
 
         /// <summary>
         /// Token for control loop of accept connections in threads
         /// </summary>
         private CancellationTokenSource _AcceptConnectionsLoop;
 
+
         /// <summary>
         /// Dirrectory for calculate relative path
         /// </summary>
         private string _CurrentDirectory;
+
 
         // because many connections may be accepted
         // simultaneously, we need to control access
@@ -136,6 +142,7 @@ namespace SimplifiedCore
         /// Object for lock for the synchronization in the context of adding new connection
         /// </summary>
         private object _NewConnectionSyncRoot = new object();
+
 
         /*
             this syncroot is used to hang Start() function
@@ -151,26 +158,48 @@ namespace SimplifiedCore
         /// </summary>
         private object _CleanUpSyncRoot = new object();
 
+
         /// <summary>
         /// Thread for execute methods in context of stoping of Core.
         /// </summary>
         private Thread _CleanUpThread;
+
 
         /// <summary>
         /// Flag for indicating the core running; 
         /// </summary>
         private bool _isRunning; 
 
+
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
         #endregion
 
+
+
+
+
+
         #region PROPERTIES
         internal List<Connection> Connections { get => _Connections; }
+
+
         internal List<Receiver> WaitingReceivers { get => _WaitingReceivers;}
+
+
         internal List<Sender> WaitingSenders { get => _WaitingSenders; }
+
+
         public string CurrentDirectory { get => _CurrentDirectory;  }
-        public bool IsRunning { get => _isRunning; set => _isRunning = value; }
+
+
+        public bool IsRunning { get => _isRunning; }
+
+
+        internal List<Tuple<ExternalInterface, Thread>> ExternalInterfaces { get => _ExternalInterfaces; }
         #endregion
+
+
+
 
 
         #region METHODS
@@ -821,6 +850,7 @@ namespace SimplifiedCore
             return ErrorCodes.ERROR_SUCCESS;
         }
         #endregion
+
 
 
 

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using SimplifiedCoreExternalInterface;
 using System.Net.Sockets;
 using System.Net;
 using NLog;
@@ -8,7 +7,7 @@ using NLog;
 
 
 
-namespace Messages
+namespace EntitiesFabric
 {
     public class RemoteEntity : Entity
     {
@@ -20,7 +19,6 @@ namespace Messages
         protected Task _task;
 
 
-        public Logger logger = LogManager.GetCurrentClassLogger();
         #endregion
 
 

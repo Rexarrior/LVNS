@@ -54,13 +54,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleClient\ConsoleClient.csproj">
-      <Project>{79a47dd1-573a-43e5-be02-3d958a750763}</Project>
-      <Name>ConsoleClient</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Template\ManagedTemplate.csproj">
-      <Project>{a7f8644b-384f-46e3-811b-21b7a5d5474f}</Project>
-      <Name>ManagedTemplate</Name>
+    <ProjectReference Include="..\EntitiesFabrics\EntitiesFabrics.csproj">
+      <Project>{95df8dcf-a417-41ef-90c6-4b1f4731bfe2}</Project>
+      <Name>EntitiesFabrics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

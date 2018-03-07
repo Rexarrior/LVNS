@@ -14,12 +14,14 @@ namespace SimplifiedCore
     /// </summary>
     class Receiver : IDefinedEntity
     {
+
+        #region FIELDS
         /// <summary>
         /// Uniqual identifier
         /// </summary>
         private UInt32 _ID;
 
-        #region The Library delegates
+        #region LIBRARY DELEGATES
         /// <summary>
         /// Delegate for extracted from linking library method "GetMID"
         /// </summary>
@@ -42,9 +44,23 @@ namespace SimplifiedCore
         #endregion
 
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        #endregion
 
-        
-        
+
+
+
+        #region PROPERTIES
+        public uint ID { get => _ID; }
+
+
+
+        public string MID { get => GetMID(); }
+        #endregion
+
+
+
+
+        #region METHODS
         /// <summary>
         /// Get matching ID of this receiver
         /// </summary>
@@ -99,7 +115,7 @@ namespace SimplifiedCore
         }
 
 
-        #region setters for the library delegates
+        #region LIBRARIES DELEGATES SETTERS
         /// <summary>
         /// Set current "GetMID" and "MatchMID" delegates of
         /// extracted from linking library method to given delegates. 
@@ -182,5 +198,7 @@ namespace SimplifiedCore
 #endif
             _CloseConnectionRoutine( _ID );
         }
+
+        #endregion
     }
 }

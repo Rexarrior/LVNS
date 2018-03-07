@@ -9,6 +9,7 @@ namespace SimplifiedCore
      */
     class ExternalEntity
     {
+        #region FIELDS
         /// <summary>
         /// Unique identifier
         /// Used to sustain the ID that
@@ -23,8 +24,18 @@ namespace SimplifiedCore
 
         
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        #endregion
 
 
+        #region PROPERTIES
+        public uint ID { get => _ID;  }
+
+        public IsReceiver_Delegate IsReceiverRoutine { get => _IsReceiverRoutine; set => _IsReceiverRoutine = value; }
+
+        #endregion
+
+
+        #region METHODS
         /// <summary>
         /// Identify the entity as receiver or sender.
         /// </summary>
@@ -53,7 +64,11 @@ namespace SimplifiedCore
         }
 
 
+        #endregion
 
+
+
+        #region CONSTRUCTORS
         /// <summary>
         /// Create instatce of ExternalEntity
         /// </summary>
@@ -67,5 +82,7 @@ namespace SimplifiedCore
             _ID = id;
             _IsReceiverRoutine = isReceiver;
         }
+        #endregion
     }
+
 }

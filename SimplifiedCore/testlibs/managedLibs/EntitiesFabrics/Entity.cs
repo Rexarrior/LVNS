@@ -1,7 +1,8 @@
 ﻿using System;
+using System.ComponentModel.Composition;
 using NLog;
 
-namespace SimplifiedCoreExternalInterface
+namespace EntitiesFabric
 {
     public delegate void Receive_Delegate(byte[] data);
     public delegate void Load_Delegate(byte[] buffer);
@@ -33,7 +34,6 @@ namespace SimplifiedCoreExternalInterface
 
 
 
-    [System.ComponentModel.Composition.PartNotDiscoverable]
     public abstract class Entity : IEntity
         { 
             #region fields

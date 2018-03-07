@@ -9,7 +9,7 @@ using System.IO;
 
 namespace SimplifiedCore
 {
-    #region description
+    #region DESCRIPTION
     /*
      * ExternalInterface class:
      * 
@@ -82,7 +82,7 @@ namespace SimplifiedCore
      */ 
     #endregion
 
-    #region delegates declaration
+    #region DELEGATES
     /// <summary>
     /// Delegate for "AcceptConnection" library method.
     /// 
@@ -261,12 +261,14 @@ namespace SimplifiedCore
     /// </summary>
     class ExternalInterface : IDisposable
     {
+        #region FIELDS
         /// <summary>
         /// Loader for linking library
         /// </summary>
         private IDLLLoader DLLLoader;
 
-        #region delegates for library methods
+
+        #region LIBRARY METHODS DELEGATES
         /// <summary>
         /// Delegate for extracted from linking library method "AcceptConnection" 
         /// </summary>
@@ -314,15 +316,20 @@ namespace SimplifiedCore
 
         #endregion
 
+
         /// <summary>
         /// Is this interface terminating now
         /// </summary>
         private volatile bool _IsTerminating;
 
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        #endregion
 
 
 
+
+
+        #region METHODS
         /// <summary>
         /// Check file by given path for identify it as manage or unmanaged library or make a conclusion about library damage.
         /// </summary>
@@ -423,100 +430,6 @@ namespace SimplifiedCore
         }
 
 
-
-
-        /// <summary>
-        /// Explore given path, check and load the library,  
-        /// and create instance of ExternalInterface
-        /// </summary>
-        /// <param name="dllPath">Path to the library</param>
-        public ExternalInterface(String dllPath)
-        {
-#if DEBUG
-            logger.Trace(LogTraceMessages.CONSTRUCTOR_INVOKED);
-
-#endif
-            string dllName = Path.GetFileName(dllPath);
-#if DEBUG
-            logger.Trace(LogTraceMessages.LIBRARY_TYPE_REQUESTED,
-                dllName);
-#endif
-            int statusGetDLLType = GetDLLType( dllPath );
-#if DEBUG
-            logger.Trace(LogTraceMessages.LIBRARY_TYPE_RESPONSED,
-                  dllName, statusGetDLLType );
-#endif
-            switch ( statusGetDLLType )
-            {
-                case ErrorCodes.UNMANAGED_DLL:
-
-#if DEBUG
-                    logger.Trace(LogTraceMessages.LIBRARY_TYPE_IDENTIFIED,
-                          dllName, "UnManaged");
-#endif
-
-                    DLLLoader = new UnmanagedDLLLoader();
-                    break;
-                case ErrorCodes.MANAGED_DLL:
-#if DEBUG
-                    logger.Trace(LogTraceMessages.LIBRARY_TYPE_IDENTIFIED,
-                          dllName, "Managed");
-#endif
-                    DLLLoader = new ManagedDLLLoader();
-                    break;
-                case ErrorCodes.DLL_DAMAGED:
-                    logger.Error("{0}. {1}. DLL {2} file is damaged (maybe it's not even a DLL)  ",
-                      ErrorCodes.DLL_DAMAGED, dllName);
-                    throw new Exception( dllPath + " DLL file is damaged (maybe it's not even a DLL)" );
-                case ErrorCodes.FILE_NOT_FOUND:
-                    logger.Error("{0}. {1}. Library {2} file not found.  ",
-                           ErrorCodes.FILE_NOT_FOUND, dllName);
-                    throw new Exception( dllPath + " DLL file not found" );
-                case ErrorCodes.FILE_COULDNT_BE_OPEN:
-                    logger.Error("{0}. {1}. Library {2} file couldn't.  ",
-                           ErrorCodes.FILE_NOT_FOUND, dllName);
-                    throw new Exception( "Couldn't open " + dllPath );
-                default:
-                    logger.Error("{0}. {1}. Library {2} type not recognized. DLLType() returned some stupid shit  ",
-                          ErrorCodes.FILE_NOT_FOUND, dllName);
-                    throw new Exception( "Internal Error: DLLType() returned some stupid shit\r\nDLL file: " + dllPath );
-            }
-
-
-#if DEBUG
-            logger.Trace(LogTraceMessages.LIBRARY_LOADING,
-                  dllName);
-#endif
-            DLLLoader.LoadDLL( dllPath );
-
-#if DEBUG
-            logger.Trace(LogTraceMessages.LIBRARY_LOADED,
-                  dllName);
-
-            logger.Trace(LogTraceMessages.LIBRARY_GETTING_DELEGATES,
-                  dllName);
-#endif
-            AcceptConnectionRoutine = DLLLoader.GetAcceptConnectionDelegate();
-            IsReceiverDelegate = DLLLoader.GetIsReceiverDelegate();
-            GetMIDDelegate = DLLLoader.GetGetMIDDelegate();
-            MatchMIDDelegate = DLLLoader.GetMatchMIDDelegate();
-            GetDataDelegate = DLLLoader.GetGetDataDelegate();
-            DispatchDataDelegate = DLLLoader.GetDispatchDataDelegate();
-            StopAcceptingRoutine = DLLLoader.GetStopAcceptingDelegate();
-            TerminateRoutine = DLLLoader.GetTerminateDelegate();
-            CloseConnectionDelegate = DLLLoader.GetCloseConnectionDelegate();
-
-#if DEBUG
-            logger.Trace(LogTraceMessages.LIBRARY_DELEGATES_RECEIVED,
-                  dllName);
-#endif
-
-            _IsTerminating = false;
-
-        }
-
-
-
         
          /// <summary>
          /// Supposed to call a DLL function, that
@@ -559,7 +472,7 @@ namespace SimplifiedCore
 
 
 
-        #region external setters for delegates
+        #region DELEGATES SETTERS
         /// <summary>
         /// Set "GetMID" and "MatchMID" delegates of entity to delegates of this interface
         /// </summary>
@@ -658,5 +571,104 @@ namespace SimplifiedCore
                 "The");
 #endif
         }
+
+        #endregion
+
+
+
+
+
+        #region CONSTRUCTORS
+        /// <summary>
+        /// Explore given path, check and load the library,  
+        /// and create instance of ExternalInterface
+        /// </summary>
+        /// <param name="dllPath">Path to the library</param>
+        public ExternalInterface(String dllPath)
+        {
+#if DEBUG
+            logger.Trace(LogTraceMessages.CONSTRUCTOR_INVOKED);
+
+#endif
+            string dllName = Path.GetFileName(dllPath);
+#if DEBUG
+            logger.Trace(LogTraceMessages.LIBRARY_TYPE_REQUESTED,
+                dllName);
+#endif
+            int statusGetDLLType = GetDLLType(dllPath);
+#if DEBUG
+            logger.Trace(LogTraceMessages.LIBRARY_TYPE_RESPONSED,
+                  dllName, statusGetDLLType);
+#endif
+            switch (statusGetDLLType)
+            {
+                case ErrorCodes.UNMANAGED_DLL:
+
+#if DEBUG
+                    logger.Trace(LogTraceMessages.LIBRARY_TYPE_IDENTIFIED,
+                          dllName, "UnManaged");
+#endif
+
+                    DLLLoader = new UnmanagedDLLLoader();
+                    break;
+                case ErrorCodes.MANAGED_DLL:
+#if DEBUG
+                    logger.Trace(LogTraceMessages.LIBRARY_TYPE_IDENTIFIED,
+                          dllName, "Managed");
+#endif
+                    DLLLoader = new ManagedDLLLoader();
+                    break;
+                case ErrorCodes.DLL_DAMAGED:
+                    logger.Error("{0}. {1}. DLL {2} file is damaged (maybe it's not even a DLL)  ",
+                      ErrorCodes.DLL_DAMAGED, dllName);
+                    throw new Exception(dllPath + " DLL file is damaged (maybe it's not even a DLL)");
+                case ErrorCodes.FILE_NOT_FOUND:
+                    logger.Error("{0}. {1}. Library {2} file not found.  ",
+                           ErrorCodes.FILE_NOT_FOUND, dllName);
+                    throw new Exception(dllPath + " DLL file not found");
+                case ErrorCodes.FILE_COULDNT_BE_OPEN:
+                    logger.Error("{0}. {1}. Library {2} file couldn't.  ",
+                           ErrorCodes.FILE_NOT_FOUND, dllName);
+                    throw new Exception("Couldn't open " + dllPath);
+                default:
+                    logger.Error("{0}. {1}. Library {2} type not recognized. DLLType() returned some stupid shit  ",
+                          ErrorCodes.FILE_NOT_FOUND, dllName);
+                    throw new Exception("Internal Error: DLLType() returned some stupid shit\r\nDLL file: " + dllPath);
+            }
+
+
+#if DEBUG
+            logger.Trace(LogTraceMessages.LIBRARY_LOADING,
+                  dllName);
+#endif
+            DLLLoader.LoadDLL(dllPath);
+
+#if DEBUG
+            logger.Trace(LogTraceMessages.LIBRARY_LOADED,
+                  dllName);
+
+            logger.Trace(LogTraceMessages.LIBRARY_GETTING_DELEGATES,
+                  dllName);
+#endif
+            AcceptConnectionRoutine = DLLLoader.GetAcceptConnectionDelegate();
+            IsReceiverDelegate = DLLLoader.GetIsReceiverDelegate();
+            GetMIDDelegate = DLLLoader.GetGetMIDDelegate();
+            MatchMIDDelegate = DLLLoader.GetMatchMIDDelegate();
+            GetDataDelegate = DLLLoader.GetGetDataDelegate();
+            DispatchDataDelegate = DLLLoader.GetDispatchDataDelegate();
+            StopAcceptingRoutine = DLLLoader.GetStopAcceptingDelegate();
+            TerminateRoutine = DLLLoader.GetTerminateDelegate();
+            CloseConnectionDelegate = DLLLoader.GetCloseConnectionDelegate();
+
+#if DEBUG
+            logger.Trace(LogTraceMessages.LIBRARY_DELEGATES_RECEIVED,
+                  dllName);
+#endif
+
+            _IsTerminating = false;
+
+        }
+        #endregion
+
     }
 }

@@ -31,6 +31,7 @@ namespace SimplifiedCore
     /// </summary>
     class Connection : IDisposable
     {
+        #region FIELDS
         /// <summary>
         /// Sender of this connection
         /// </summary>
@@ -51,7 +52,10 @@ namespace SimplifiedCore
         /// </summary>
         private CancellationTokenSource _TransferLoop;
 
+
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        #endregion
+
 
         #region PROPERTIES
         public string ReceiverMID { get => _Receiver.GetMID(); }
@@ -61,6 +65,8 @@ namespace SimplifiedCore
         #endregion
 
 
+
+        #region METHODS
         //TODO: It is temporary solution. So long. 
         /// <summary>
         /// Checking the given byte array for a valuable data contained. 
@@ -342,9 +348,11 @@ namespace SimplifiedCore
             _Sender = null;
             _Receiver = null;
         }
+        #endregion
 
 
 
+        #region CONSTRUCTORS
         /// <summary>
         /// Create representing of connection between the sender and the receiver
         /// without starting a data transfer.
@@ -364,5 +372,6 @@ namespace SimplifiedCore
 
             _TransferLoop = null;
         }
+        #endregion
     }
 }

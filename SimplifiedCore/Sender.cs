@@ -13,12 +13,13 @@ namespace SimplifiedCore
     /// </summary>
     class Sender : IDefinedEntity
     {
+        #region FIELDS
         /// <summary>
         /// Unique identifier
         /// </summary>
         private UInt32 _ID;
 
-        #region delegates for library methods
+        #region LIBRARY METHODS DELEGATES
 
         /// <summary>
         /// Delegate for extracted from linked library method "GetMID"
@@ -48,9 +49,18 @@ namespace SimplifiedCore
         #endregion
 
         private static Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        #endregion
 
 
+        #region PROPERTIES
+        public uint ID { get => _ID;  }
 
+
+        public string MID { get => GetMID(); }
+        #endregion
+
+
+        #region METHODS
         /// <summary>
         /// Get matching id of this sender. 
         /// </summary>
@@ -107,7 +117,7 @@ namespace SimplifiedCore
         }
 
 
-        #region setters for the delegates
+        #region DELEGATES SETTERS
         /// <summary>
         /// Set current "GetMID" and "MatchMID" delegates of extracted
         /// from linking library methods to given delegates. 
@@ -197,5 +207,8 @@ namespace SimplifiedCore
 #endif
             _CloseConnectionRoutine( _ID );
         }
+
+
+        #endregion
     }
 }

@@ -11,6 +11,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Net;
 using System.Reflection;
+using EntitiesFabric; 
 
 namespace SimplifiedCoreExternalInterface
 {
