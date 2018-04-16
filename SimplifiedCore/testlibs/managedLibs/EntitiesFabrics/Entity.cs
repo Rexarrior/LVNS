@@ -2,7 +2,7 @@
 using System.ComponentModel.Composition;
 using NLog;
 
-namespace EntitiesFabric
+namespace EntitiesFabrics
 {
     public delegate void Receive_Delegate(byte[] data);
     public delegate void Load_Delegate(byte[] buffer);

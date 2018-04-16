@@ -5,7 +5,7 @@ using System.Linq;
 
 
 
-namespace EntitiesFabric
+namespace EntitiesFabrics
 { 
     #region CosoleServerEntities
 

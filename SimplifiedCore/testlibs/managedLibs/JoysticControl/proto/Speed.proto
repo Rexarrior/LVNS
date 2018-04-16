@@ -1,0 +1,13 @@
+syntax = "proto3";
+option csharp_namespace = "RobotsInterfaces";
+
+message Speed {
+    int32 destId = 3; // destination id, num large 0
+    int32 rightSpeed = 1; // num between -100 and 100
+    int32 leftSpeed = 2; // num between -100 and 100
+}
+
+message SpeedPack
+{
+    repeated Speed speeds = 1; 
+}

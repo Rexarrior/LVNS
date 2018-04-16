@@ -11,7 +11,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Net;
 using System.Reflection;
-using EntitiesFabric; 
+using EntitiesFabrics; 
 
 namespace SimplifiedCoreExternalInterface
 {
@@ -22,7 +22,7 @@ namespace SimplifiedCoreExternalInterface
 
     class Methods
     {
-        private const int LOCK_TIME = 100; 
+        private const int LOCK_TIME = 10000; 
 
 
         #region fields

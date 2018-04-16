@@ -7,7 +7,7 @@ using System.Threading;
 
 
 
-namespace EntitiesFabric.ConsoleClient
+namespace EntitiesFabrics.ConsoleClient
     {
 
 

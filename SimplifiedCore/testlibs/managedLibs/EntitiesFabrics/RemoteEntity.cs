@@ -7,7 +7,7 @@ using NLog;
 
 
 
-namespace EntitiesFabric
+namespace EntitiesFabrics
 {
     public class RemoteEntity : Entity
     {

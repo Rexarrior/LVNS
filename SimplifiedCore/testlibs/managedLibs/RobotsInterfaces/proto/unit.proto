@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+message Unit
+{
+    enum UnitColor
+    {
+        Blue = 0;
+        Yellow = 1; 
+        None = 2;
+    }
+
+    double X = 1; 
+    double Y = 2; 
+    double Orientation = 3; 
+    UnitColor Color = 4; 
+    uint32 id = 5;
+
+}
+
+
+message Position {
+    uint32 Count = 1;
+    repeated Unit Units = 2; 
+}

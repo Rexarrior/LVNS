@@ -8,8 +8,8 @@ using NLog;
 using System.ComponentModel.Composition;
 using System.Net.Sockets;
 using System.Net;
-using EntitiesFabric;
-using EntitiesFabric.ConsoleClient;
+using EntitiesFabrics;
+using EntitiesFabrics.ConsoleClient;
 
 namespace JsonServer
 {
