@@ -288,11 +288,12 @@ namespace RobotsInterfaces
                     string mac = command.Id; 
 
                     IPEndPoint adress;
-                    if (ActiveRobots.ContainsKey(mac))
+                    if (true || ActiveRobots.ContainsKey(mac))
                     {
-                        adress = new IPEndPoint(
-                            IPAddress.Parse(RemoteController.ActiveRobots[mac]), PORT);
+                     //   adress = new IPEndPoint(
+                       //     IPAddress.Parse(RemoteController.ActiveRobots[mac]), PORT);
                        
+                        adress  = new IPEndPoint(IPAddress.Parse("192.168.0.112"), 4210);
                         _udpClient.Send(command.Message, command.Message.Length, adress);
                     }
                     else
